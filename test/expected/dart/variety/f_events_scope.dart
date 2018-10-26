@@ -20,17 +20,12 @@ const String delimiter = '.';
 class EventsPublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
-  Map<String, frugal.FMethod> _methods;
+  List<frugal.Middleware> _combinedMiddleware;
   EventsPublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['EventCreated'] = new frugal.FMethod(this._publishEventCreated, 'Events', 'publishEventCreated', combined);
-    this._methods['SomeInt'] = new frugal.FMethod(this._publishSomeInt, 'Events', 'publishSomeInt', combined);
-    this._methods['SomeStr'] = new frugal.FMethod(this._publishSomeStr, 'Events', 'publishSomeStr', combined);
-    this._methods['SomeList'] = new frugal.FMethod(this._publishSomeList, 'Events', 'publishSomeList', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   Future open() {
@@ -43,7 +38,7 @@ class EventsPublisher {
 
   /// This is a docstring.
   Future publishEventCreated(frugal.FContext ctx, String user, t_variety.Event req) {
-    return this._methods['EventCreated']([ctx, user, req]);
+    return frugal.composeMiddleware(_publishEventCreated, _combinedMiddleware)('Events', 'publishEventCreated', [ctx, user, req]);
   }
 
   Future _publishEventCreated(frugal.FContext ctx, String user, t_variety.Event req) async {
@@ -63,7 +58,7 @@ class EventsPublisher {
 
 
   Future publishSomeInt(frugal.FContext ctx, String user, int req) {
-    return this._methods['SomeInt']([ctx, user, req]);
+    return frugal.composeMiddleware(_publishSomeInt, _combinedMiddleware)('Events', 'publishSomeInt', [ctx, user, req]);
   }
 
   Future _publishSomeInt(frugal.FContext ctx, String user, int req) async {
@@ -83,7 +78,7 @@ class EventsPublisher {
 
 
   Future publishSomeStr(frugal.FContext ctx, String user, String req) {
-    return this._methods['SomeStr']([ctx, user, req]);
+    return frugal.composeMiddleware(_publishSomeStr, _combinedMiddleware)('Events', 'publishSomeStr', [ctx, user, req]);
   }
 
   Future _publishSomeStr(frugal.FContext ctx, String user, String req) async {
@@ -103,7 +98,7 @@ class EventsPublisher {
 
 
   Future publishSomeList(frugal.FContext ctx, String user, List<Map<int, t_variety.Event>> req) {
-    return this._methods['SomeList']([ctx, user, req]);
+    return frugal.composeMiddleware(_publishSomeList, _combinedMiddleware)('Events', 'publishSomeList', [ctx, user, req]);
   }
 
   Future _publishSomeList(frugal.FContext ctx, String user, List<Map<int, t_variety.Event>> req) async {
@@ -155,7 +150,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvEventCreated(String op, frugal.FProtocolFactory protocolFactory, dynamic onEvent(frugal.FContext ctx, t_variety.Event req)) {
-    frugal.FMethod method = new frugal.FMethod(onEvent, 'Events', 'subscribeEvent', this._middleware);
     callbackEventCreated(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -169,7 +163,7 @@ class EventsSubscriber {
       t_variety.Event req = new t_variety.Event();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onEvent, _middleware)('Events', 'subscribeEvent', [ctx, req]);
     }
     return callbackEventCreated;
   }
@@ -185,7 +179,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeInt(String op, frugal.FProtocolFactory protocolFactory, dynamic oni64(frugal.FContext ctx, int req)) {
-    frugal.FMethod method = new frugal.FMethod(oni64, 'Events', 'subscribei64', this._middleware);
     callbackSomeInt(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -198,7 +191,7 @@ class EventsSubscriber {
       }
       int req = iprot.readI64();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(oni64, _middleware)('Events', 'subscribei64', [ctx, req]);
     }
     return callbackSomeInt;
   }
@@ -214,7 +207,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeStr(String op, frugal.FProtocolFactory protocolFactory, dynamic onstring(frugal.FContext ctx, String req)) {
-    frugal.FMethod method = new frugal.FMethod(onstring, 'Events', 'subscribestring', this._middleware);
     callbackSomeStr(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -227,7 +219,7 @@ class EventsSubscriber {
       }
       String req = iprot.readString();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onstring, _middleware)('Events', 'subscribestring', [ctx, req]);
     }
     return callbackSomeStr;
   }
@@ -243,7 +235,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeList(String op, frugal.FProtocolFactory protocolFactory, dynamic onlist(frugal.FContext ctx, List<Map<int, t_variety.Event>> req)) {
-    frugal.FMethod method = new frugal.FMethod(onlist, 'Events', 'subscribelist', this._middleware);
     callbackSomeList(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -270,7 +261,7 @@ class EventsSubscriber {
       }
       iprot.readListEnd();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onlist, _middleware)('Events', 'subscribelist', [ctx, req]);
     }
     return callbackSomeList;
   }

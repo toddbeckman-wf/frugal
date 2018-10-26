@@ -27,16 +27,12 @@ abstract class FStore {
 /// Users can buy an album or enter a giveaway for a free album.
 class FStoreClient implements FStore {
   static final logging.Logger _frugalLog = new logging.Logger('Store');
-  Map<String, frugal.FMethod> _methods;
-
+  List<frugal.Middleware> _combinedMiddleware;
   FStoreClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['buyAlbum'] = new frugal.FMethod(this._buyAlbum, 'Store', 'buyAlbum', combined);
-    this._methods['enterAlbumGiveaway'] = new frugal.FMethod(this._enterAlbumGiveaway, 'Store', 'enterAlbumGiveaway', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;
@@ -44,7 +40,7 @@ class FStoreClient implements FStore {
 
   @override
   Future<t_v1_music.Album> buyAlbum(frugal.FContext ctx, String aSIN, String acct) {
-    return this._methods['buyAlbum']([ctx, aSIN, acct]) as Future<t_v1_music.Album>;
+    return frugal.composeMiddleware(_buyAlbum, _combinedMiddleware)('Store', 'buyAlbum', [ctx, aSIN, acct]) as Future as Future<t_v1_music.Album>;
   }
 
   Future<t_v1_music.Album> _buyAlbum(frugal.FContext ctx, String aSIN, String acct) async {
@@ -91,7 +87,7 @@ class FStoreClient implements FStore {
   @override
   Future<bool> enterAlbumGiveaway(frugal.FContext ctx, String email, String name) {
     _frugalLog.warning("Call to deprecated function 'Store.enterAlbumGiveaway'");
-    return this._methods['enterAlbumGiveaway']([ctx, email, name]) as Future<bool>;
+    return frugal.composeMiddleware(_enterAlbumGiveaway, _combinedMiddleware)('Store', 'enterAlbumGiveaway', [ctx, email, name]) as Future as Future<bool>;
   }
 
   Future<bool> _enterAlbumGiveaway(frugal.FContext ctx, String email, String name) async {

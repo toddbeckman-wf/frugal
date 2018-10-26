@@ -18,14 +18,12 @@ const String delimiter = '.';
 class MyScopePublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
-  Map<String, frugal.FMethod> _methods;
+  List<frugal.Middleware> _combinedMiddleware;
   MyScopePublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['newItem'] = new frugal.FMethod(this._publishnewItem, 'MyScope', 'publishnewItem', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   Future open() {
@@ -37,7 +35,7 @@ class MyScopePublisher {
   }
 
   Future publishnewItem(frugal.FContext ctx, t_vendor_namespace.Item req) {
-    return this._methods['newItem']([ctx, req]);
+    return frugal.composeMiddleware(_publishnewItem, _combinedMiddleware)('MyScope', 'publishnewItem', [ctx, req]);
   }
 
   Future _publishnewItem(frugal.FContext ctx, t_vendor_namespace.Item req) async {
@@ -75,7 +73,6 @@ class MyScopeSubscriber {
   }
 
   frugal.FAsyncCallback _recvnewItem(String op, frugal.FProtocolFactory protocolFactory, dynamic onItem(frugal.FContext ctx, t_vendor_namespace.Item req)) {
-    frugal.FMethod method = new frugal.FMethod(onItem, 'MyScope', 'subscribeItem', this._middleware);
     callbacknewItem(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -89,7 +86,7 @@ class MyScopeSubscriber {
       t_vendor_namespace.Item req = new t_vendor_namespace.Item();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onItem, _middleware)('MyScope', 'subscribeItem', [ctx, req]);
     }
     return callbacknewItem;
   }

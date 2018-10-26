@@ -41,4 +41,5 @@ export 'src/frugal.dart'
         Middleware,
         TMemoryOutputBuffer,
         TMemoryTransport,
-        debugMiddleware;
+        debugMiddleware,
+        composeMiddleware;

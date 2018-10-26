@@ -54,27 +54,13 @@ abstract class FFoo extends t_actual_base_dart.FBaseFoo {
 /// a frugal Context for each service call.
 class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   static final logging.Logger _frugalLog = new logging.Logger('Foo');
-  Map<String, frugal.FMethod> _methods;
-
+  List<frugal.Middleware> _combinedMiddleware;
   FFooClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware])
       : super(provider, middleware) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['ping'] = new frugal.FMethod(this._ping, 'Foo', 'ping', combined);
-    this._methods['blah'] = new frugal.FMethod(this._blah, 'Foo', 'blah', combined);
-    this._methods['oneWay'] = new frugal.FMethod(this._oneWay, 'Foo', 'oneWay', combined);
-    this._methods['bin_method'] = new frugal.FMethod(this._bin_method, 'Foo', 'bin_method', combined);
-    this._methods['param_modifiers'] = new frugal.FMethod(this._param_modifiers, 'Foo', 'param_modifiers', combined);
-    this._methods['underlying_types_test'] = new frugal.FMethod(this._underlying_types_test, 'Foo', 'underlying_types_test', combined);
-    this._methods['getThing'] = new frugal.FMethod(this._getThing, 'Foo', 'getThing', combined);
-    this._methods['getMyInt'] = new frugal.FMethod(this._getMyInt, 'Foo', 'getMyInt', combined);
-    this._methods['use_subdir_struct'] = new frugal.FMethod(this._use_subdir_struct, 'Foo', 'use_subdir_struct', combined);
-    this._methods['sayHelloWith'] = new frugal.FMethod(this._sayHelloWith, 'Foo', 'sayHelloWith', combined);
-    this._methods['whatDoYouSay'] = new frugal.FMethod(this._whatDoYouSay, 'Foo', 'whatDoYouSay', combined);
-    this._methods['sayAgain'] = new frugal.FMethod(this._sayAgain, 'Foo', 'sayAgain', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;
@@ -86,7 +72,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   @override
   Future ping(frugal.FContext ctx) {
     _frugalLog.warning("Call to deprecated function 'Foo.ping'");
-    return this._methods['ping']([ctx]);
+    return frugal.composeMiddleware(_ping, _combinedMiddleware)('Foo', 'ping', [ctx]) as Future;
   }
 
   Future _ping(frugal.FContext ctx) async {
@@ -119,7 +105,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   /// Blah the server.
   @override
   Future<int> blah(frugal.FContext ctx, int num, String str, t_variety.Event event) {
-    return this._methods['blah']([ctx, num, str, event]) as Future<int>;
+    return frugal.composeMiddleware(_blah, _combinedMiddleware)('Foo', 'blah', [ctx, num, str, event]) as Future as Future<int>;
   }
 
   Future<int> _blah(frugal.FContext ctx, int num, String str, t_variety.Event event) async {
@@ -168,7 +154,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   /// oneway methods don't receive a response from the server.
   @override
   Future oneWay(frugal.FContext ctx, int id, Map<int, String> req) {
-    return this._methods['oneWay']([ctx, id, req]);
+    return frugal.composeMiddleware(_oneWay, _combinedMiddleware)('Foo', 'oneWay', [ctx, id, req]) as Future;
   }
 
   Future _oneWay(frugal.FContext ctx, int id, Map<int, String> req) async {
@@ -186,7 +172,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
 
   @override
   Future<Uint8List> bin_method(frugal.FContext ctx, Uint8List bin, String str) {
-    return this._methods['bin_method']([ctx, bin, str]) as Future<Uint8List>;
+    return frugal.composeMiddleware(_bin_method, _combinedMiddleware)('Foo', 'bin_method', [ctx, bin, str]) as Future as Future<Uint8List>;
   }
 
   Future<Uint8List> _bin_method(frugal.FContext ctx, Uint8List bin, String str) async {
@@ -230,7 +216,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<int> param_modifiers(frugal.FContext ctx, int opt_num, int default_num, int req_num) {
-    return this._methods['param_modifiers']([ctx, opt_num, default_num, req_num]) as Future<int>;
+    return frugal.composeMiddleware(_param_modifiers, _combinedMiddleware)('Foo', 'param_modifiers', [ctx, opt_num, default_num, req_num]) as Future as Future<int>;
   }
 
   Future<int> _param_modifiers(frugal.FContext ctx, int opt_num, int default_num, int req_num) async {
@@ -272,7 +258,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<List<int>> underlying_types_test(frugal.FContext ctx, List<int> list_type, Set<int> set_type) {
-    return this._methods['underlying_types_test']([ctx, list_type, set_type]) as Future<List<int>>;
+    return frugal.composeMiddleware(_underlying_types_test, _combinedMiddleware)('Foo', 'underlying_types_test', [ctx, list_type, set_type]) as Future as Future<List<int>>;
   }
 
   Future<List<int>> _underlying_types_test(frugal.FContext ctx, List<int> list_type, Set<int> set_type) async {
@@ -313,7 +299,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<t_validStructs.Thing> getThing(frugal.FContext ctx) {
-    return this._methods['getThing']([ctx]) as Future<t_validStructs.Thing>;
+    return frugal.composeMiddleware(_getThing, _combinedMiddleware)('Foo', 'getThing', [ctx]) as Future as Future<t_validStructs.Thing>;
   }
 
   Future<t_validStructs.Thing> _getThing(frugal.FContext ctx) async {
@@ -352,7 +338,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<int> getMyInt(frugal.FContext ctx) {
-    return this._methods['getMyInt']([ctx]) as Future<int>;
+    return frugal.composeMiddleware(_getMyInt, _combinedMiddleware)('Foo', 'getMyInt', [ctx]) as Future as Future<int>;
   }
 
   Future<int> _getMyInt(frugal.FContext ctx) async {
@@ -391,7 +377,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<t_subdir_include_ns.A> use_subdir_struct(frugal.FContext ctx, t_subdir_include_ns.A a) {
-    return this._methods['use_subdir_struct']([ctx, a]) as Future<t_subdir_include_ns.A>;
+    return frugal.composeMiddleware(_use_subdir_struct, _combinedMiddleware)('Foo', 'use_subdir_struct', [ctx, a]) as Future as Future<t_subdir_include_ns.A>;
   }
 
   Future<t_subdir_include_ns.A> _use_subdir_struct(frugal.FContext ctx, t_subdir_include_ns.A a) async {
@@ -431,7 +417,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<String> sayHelloWith(frugal.FContext ctx, String newMessage) {
-    return this._methods['sayHelloWith']([ctx, newMessage]) as Future<String>;
+    return frugal.composeMiddleware(_sayHelloWith, _combinedMiddleware)('Foo', 'sayHelloWith', [ctx, newMessage]) as Future as Future<String>;
   }
 
   Future<String> _sayHelloWith(frugal.FContext ctx, String newMessage) async {
@@ -471,7 +457,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<String> whatDoYouSay(frugal.FContext ctx, String messageArgs) {
-    return this._methods['whatDoYouSay']([ctx, messageArgs]) as Future<String>;
+    return frugal.composeMiddleware(_whatDoYouSay, _combinedMiddleware)('Foo', 'whatDoYouSay', [ctx, messageArgs]) as Future as Future<String>;
   }
 
   Future<String> _whatDoYouSay(frugal.FContext ctx, String messageArgs) async {
@@ -511,7 +497,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   @override
   Future<String> sayAgain(frugal.FContext ctx, String messageResult) {
-    return this._methods['sayAgain']([ctx, messageResult]) as Future<String>;
+    return frugal.composeMiddleware(_sayAgain, _combinedMiddleware)('Foo', 'sayAgain', [ctx, messageResult]) as Future as Future<String>;
   }
 
   Future<String> _sayAgain(frugal.FContext ctx, String messageResult) async {

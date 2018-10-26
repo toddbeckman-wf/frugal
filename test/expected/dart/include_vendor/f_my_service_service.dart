@@ -21,16 +21,13 @@ abstract class FMyService extends t_vendor_namespace.FVendoredBase {
 
 class FMyServiceClient extends t_vendor_namespace.FVendoredBaseClient implements FMyService {
   static final logging.Logger _frugalLog = new logging.Logger('MyService');
-  Map<String, frugal.FMethod> _methods;
-
+  List<frugal.Middleware> _combinedMiddleware;
   FMyServiceClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware])
       : super(provider, middleware) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['getItem'] = new frugal.FMethod(this._getItem, 'MyService', 'getItem', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;
@@ -38,7 +35,7 @@ class FMyServiceClient extends t_vendor_namespace.FVendoredBaseClient implements
 
   @override
   Future<t_vendor_namespace.Item> getItem(frugal.FContext ctx) {
-    return this._methods['getItem']([ctx]) as Future<t_vendor_namespace.Item>;
+    return frugal.composeMiddleware(_getItem, _combinedMiddleware)('MyService', 'getItem', [ctx]) as Future as Future<t_vendor_namespace.Item>;
   }
 
   Future<t_vendor_namespace.Item> _getItem(frugal.FContext ctx) async {

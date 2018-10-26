@@ -20,16 +20,12 @@ const String delimiter = '.';
 class AlbumWinnersPublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
-  Map<String, frugal.FMethod> _methods;
+  List<frugal.Middleware> _combinedMiddleware;
   AlbumWinnersPublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['ContestStart'] = new frugal.FMethod(this._publishContestStart, 'AlbumWinners', 'publishContestStart', combined);
-    this._methods['TimeLeft'] = new frugal.FMethod(this._publishTimeLeft, 'AlbumWinners', 'publishTimeLeft', combined);
-    this._methods['Winner'] = new frugal.FMethod(this._publishWinner, 'AlbumWinners', 'publishWinner', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   Future open() {
@@ -41,7 +37,7 @@ class AlbumWinnersPublisher {
   }
 
   Future publishContestStart(frugal.FContext ctx, List<t_v1_music.Album> req) {
-    return this._methods['ContestStart']([ctx, req]);
+    return frugal.composeMiddleware(_publishContestStart, _combinedMiddleware)('AlbumWinners', 'publishContestStart', [ctx, req]);
   }
 
   Future _publishContestStart(frugal.FContext ctx, List<t_v1_music.Album> req) async {
@@ -64,7 +60,7 @@ class AlbumWinnersPublisher {
 
 
   Future publishTimeLeft(frugal.FContext ctx, double req) {
-    return this._methods['TimeLeft']([ctx, req]);
+    return frugal.composeMiddleware(_publishTimeLeft, _combinedMiddleware)('AlbumWinners', 'publishTimeLeft', [ctx, req]);
   }
 
   Future _publishTimeLeft(frugal.FContext ctx, double req) async {
@@ -83,7 +79,7 @@ class AlbumWinnersPublisher {
 
 
   Future publishWinner(frugal.FContext ctx, t_v1_music.Album req) {
-    return this._methods['Winner']([ctx, req]);
+    return frugal.composeMiddleware(_publishWinner, _combinedMiddleware)('AlbumWinners', 'publishWinner', [ctx, req]);
   }
 
   Future _publishWinner(frugal.FContext ctx, t_v1_music.Album req) async {
@@ -124,7 +120,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvContestStart(String op, frugal.FProtocolFactory protocolFactory, dynamic onlist(frugal.FContext ctx, List<t_v1_music.Album> req)) {
-    frugal.FMethod method = new frugal.FMethod(onlist, 'AlbumWinners', 'subscribelist', this._middleware);
     callbackContestStart(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -144,7 +139,7 @@ class AlbumWinnersSubscriber {
       }
       iprot.readListEnd();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onlist, _middleware)('AlbumWinners', 'subscribelist', [ctx, req]);
     }
     return callbackContestStart;
   }
@@ -160,7 +155,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvTimeLeft(String op, frugal.FProtocolFactory protocolFactory, dynamic onMinutes(frugal.FContext ctx, double req)) {
-    frugal.FMethod method = new frugal.FMethod(onMinutes, 'AlbumWinners', 'subscribeMinutes', this._middleware);
     callbackTimeLeft(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -173,7 +167,7 @@ class AlbumWinnersSubscriber {
       }
       double req = iprot.readDouble();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onMinutes, _middleware)('AlbumWinners', 'subscribeMinutes', [ctx, req]);
     }
     return callbackTimeLeft;
   }
@@ -189,7 +183,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvWinner(String op, frugal.FProtocolFactory protocolFactory, dynamic onAlbum(frugal.FContext ctx, t_v1_music.Album req)) {
-    frugal.FMethod method = new frugal.FMethod(onAlbum, 'AlbumWinners', 'subscribeAlbum', this._middleware);
     callbackWinner(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -203,7 +196,7 @@ class AlbumWinnersSubscriber {
       t_v1_music.Album req = new t_v1_music.Album();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onAlbum, _middleware)('AlbumWinners', 'subscribeAlbum', [ctx, req]);
     }
     return callbackWinner;
   }
