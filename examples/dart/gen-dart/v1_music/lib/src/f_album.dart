@@ -14,54 +14,34 @@ class Album implements thrift.TBase {
   static final thrift.TField _DURATION_FIELD_DESC = new thrift.TField("duration", thrift.TType.DOUBLE, 2);
   static final thrift.TField _ASIN_FIELD_DESC = new thrift.TField("ASIN", thrift.TType.STRING, 3);
 
-  List<t_v1_music.Track> _tracks;
+  List<t_v1_music.Track> tracks;
   static const int TRACKS = 1;
-  double _duration = 0.0;
+  double duration = 0.0;
   static const int DURATION = 2;
-  String _aSIN;
+  String aSIN;
   static const int ASIN = 3;
 
-  bool __isset_duration = false;
 
   Album() {
   }
 
-  List<t_v1_music.Track> get tracks => this._tracks;
+  @deprecated
+  bool isSetTracks() => tracks == null;
 
-  set tracks(List<t_v1_music.Track> tracks) {
-    this._tracks = tracks;
-  }
+  @deprecated
+  unsetTracks() => tracks = null;
 
-  bool isSetTracks() => this.tracks != null;
+  @deprecated
+  bool isSetDuration() => duration == null;
 
-  unsetTracks() {
-    this.tracks = null;
-  }
+  @deprecated
+  unsetDuration() => duration = null;
 
-  double get duration => this._duration;
+  @deprecated
+  bool isSetASIN() => ASIN == null;
 
-  set duration(double duration) {
-    this._duration = duration;
-    this.__isset_duration = true;
-  }
-
-  bool isSetDuration() => this.__isset_duration;
-
-  unsetDuration() {
-    this.__isset_duration = false;
-  }
-
-  String get aSIN => this._aSIN;
-
-  set aSIN(String aSIN) {
-    this._aSIN = aSIN;
-  }
-
-  bool isSetASIN() => this.aSIN != null;
-
-  unsetASIN() {
-    this.aSIN = null;
-  }
+  @deprecated
+  unsetASIN() => ASIN = null;
 
   @override
   getFieldValue(int fieldID) {
@@ -82,26 +62,32 @@ class Album implements thrift.TBase {
     switch (fieldID) {
       case TRACKS:
         if (value == null) {
-          unsetTracks();
-        } else {
-          this.tracks = value as List<t_v1_music.Track>;
+          tracks = null;
+        } else {          if (value is List<t_v1_music.Track>) {
+            tracks = value;
+          }
         }
+
         break;
 
       case DURATION:
         if (value == null) {
-          unsetDuration();
-        } else {
-          this.duration = value as double;
+          duration = null;
+        } else {          if (value is double) {
+            duration = value;
+          }
         }
+
         break;
 
       case ASIN:
         if (value == null) {
-          unsetASIN();
-        } else {
-          this.aSIN = value as String;
+          aSIN = null;
+        } else {          if (value is String) {
+            aSIN = value;
+          }
         }
+
         break;
 
       default:
@@ -114,11 +100,14 @@ class Album implements thrift.TBase {
   bool isSet(int fieldID) {
     switch (fieldID) {
       case TRACKS:
-        return isSetTracks();
+        return tracks == null;
+
       case DURATION:
-        return isSetDuration();
+        return duration == null;
+
       case ASIN:
-        return isSetASIN();
+        return ASIN == null;
+
       default:
         throw new ArgumentError("Field $fieldID doesn't exist!");
     }
@@ -148,7 +137,6 @@ class Album implements thrift.TBase {
         case DURATION:
           if (field.type == thrift.TType.DOUBLE) {
             duration = iprot.readDouble();
-            this.__isset_duration = true;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -168,7 +156,6 @@ class Album implements thrift.TBase {
     }
     iprot.readStructEnd();
 
-    // check for required fields of primitive type, which can't be checked in the validate method
     validate();
   }
 
@@ -257,7 +244,5 @@ class Album implements thrift.TBase {
   }
 
   validate() {
-    // check for required fields
-    // check that fields of type enum have valid values
   }
 }

@@ -18,67 +18,39 @@ class AwesomeException extends Error implements thrift.TBase {
   static final thrift.TField _DEPR_FIELD_DESC = new thrift.TField("depr", thrift.TType.BOOL, 3);
 
   /// ID is a unique identifier for an awesome exception.
-  int _iD = 0;
+  int iD = 0;
   static const int ID = 1;
   /// Reason contains the error message.
-  String _reason;
+  String reason;
   static const int REASON = 2;
   /// Deprecated: use something else
   @deprecated
-  bool _depr = false;
+  bool depr = false;
   static const int DEPR = 3;
 
-  bool __isset_iD = false;
-  bool __isset_depr = false;
 
   AwesomeException() {
   }
 
-  /// ID is a unique identifier for an awesome exception.
-  int get iD => this._iD;
-
-  /// ID is a unique identifier for an awesome exception.
-  set iD(int iD) {
-    this._iD = iD;
-    this.__isset_iD = true;
-  }
-
-  bool isSetID() => this.__isset_iD;
-
-  unsetID() {
-    this.__isset_iD = false;
-  }
-
-  /// Reason contains the error message.
-  String get reason => this._reason;
-
-  /// Reason contains the error message.
-  set reason(String reason) {
-    this._reason = reason;
-  }
-
-  bool isSetReason() => this.reason != null;
-
-  unsetReason() {
-    this.reason = null;
-  }
-
-  /// Deprecated: use something else
   @deprecated
-  bool get depr => this._depr;
+  bool isSetID() => ID == null;
 
-  /// Deprecated: use something else
   @deprecated
-  set depr(bool depr) {
-    this._depr = depr;
-    this.__isset_depr = true;
-  }
+  unsetID() => ID = null;
 
-  @deprecated  bool isSetDepr() => this.__isset_depr;
+  @deprecated
+  bool isSetReason() => Reason == null;
 
-  unsetDepr() {
-    this.__isset_depr = false;
-  }
+  @deprecated
+  unsetReason() => Reason = null;
+
+  @deprecated
+  // ignore: deprecated_member_use
+  bool isSetDepr() => depr == null;
+
+  @deprecated
+  // ignore: deprecated_member_use
+  unsetDepr() => depr = null;
 
   @override
   getFieldValue(int fieldID) {
@@ -100,27 +72,34 @@ class AwesomeException extends Error implements thrift.TBase {
     switch (fieldID) {
       case ID:
         if (value == null) {
-          unsetID();
-        } else {
-          this.iD = value as int;
+          iD = null;
+        } else {          if (value is int) {
+            iD = value;
+          }
         }
+
         break;
 
       case REASON:
         if (value == null) {
-          unsetReason();
-        } else {
-          this.reason = value as String;
+          reason = null;
+        } else {          if (value is String) {
+            reason = value;
+          }
         }
+
         break;
 
       case DEPR:
         if (value == null) {
-          unsetDepr();
-        } else {
-          // ignore: deprecated_member_use
-          this.depr = value as bool;
+          depr = null;
+        } else {          // ignore: deprecated_member_use
+          if (value is bool) {
+            // ignore: deprecated_member_use
+            depr = value;
+          }
         }
+
         break;
 
       default:
@@ -133,12 +112,15 @@ class AwesomeException extends Error implements thrift.TBase {
   bool isSet(int fieldID) {
     switch (fieldID) {
       case ID:
-        return isSetID();
+        return ID == null;
+
       case REASON:
-        return isSetReason();
+        return Reason == null;
+
       case DEPR:
         // ignore: deprecated_member_use
-        return isSetDepr();
+        return depr == null;
+
       default:
         throw new ArgumentError("Field $fieldID doesn't exist!");
     }
@@ -154,7 +136,6 @@ class AwesomeException extends Error implements thrift.TBase {
         case ID:
           if (field.type == thrift.TType.I64) {
             iD = iprot.readI64();
-            this.__isset_iD = true;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -170,7 +151,6 @@ class AwesomeException extends Error implements thrift.TBase {
           if (field.type == thrift.TType.BOOL) {
             // ignore: deprecated_member_use
             depr = iprot.readBool();
-            this.__isset_depr = true;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -183,7 +163,6 @@ class AwesomeException extends Error implements thrift.TBase {
     }
     iprot.readStructEnd();
 
-    // check for required fields of primitive type, which can't be checked in the validate method
     validate();
   }
 
@@ -268,7 +247,5 @@ class AwesomeException extends Error implements thrift.TBase {
   }
 
   validate() {
-    // check for required fields
-    // check that fields of type enum have valid values
   }
 }

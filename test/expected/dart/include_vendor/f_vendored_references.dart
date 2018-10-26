@@ -13,44 +13,28 @@ class VendoredReferences implements thrift.TBase {
   static final thrift.TField _REFERENCE_VENDORED_CONST_FIELD_DESC = new thrift.TField("reference_vendored_const", thrift.TType.I32, 1);
   static final thrift.TField _REFERENCE_VENDORED_ENUM_FIELD_DESC = new thrift.TField("reference_vendored_enum", thrift.TType.I32, 2);
 
-  int _reference_vendored_const;
+  int reference_vendored_const;
   static const int REFERENCE_VENDORED_CONST = 1;
-  int _reference_vendored_enum;
+  int reference_vendored_enum;
   static const int REFERENCE_VENDORED_ENUM = 2;
 
-  bool __isset_reference_vendored_const = false;
-  bool __isset_reference_vendored_enum = false;
 
   VendoredReferences() {
     this.reference_vendored_const = t_vendor_namespace.VendorNamespaceConstants.a_const;
     this.reference_vendored_enum = t_vendor_namespace.MyEnum.TWO;
   }
 
-  int get reference_vendored_const => this._reference_vendored_const;
+  @deprecated
+  bool isSetReference_vendored_const() => reference_vendored_const == null;
 
-  set reference_vendored_const(int reference_vendored_const) {
-    this._reference_vendored_const = reference_vendored_const;
-    this.__isset_reference_vendored_const = true;
-  }
+  @deprecated
+  unsetReference_vendored_const() => reference_vendored_const = null;
 
-  bool isSetReference_vendored_const() => this.__isset_reference_vendored_const;
+  @deprecated
+  bool isSetReference_vendored_enum() => reference_vendored_enum == null;
 
-  unsetReference_vendored_const() {
-    this.__isset_reference_vendored_const = false;
-  }
-
-  int get reference_vendored_enum => this._reference_vendored_enum;
-
-  set reference_vendored_enum(int reference_vendored_enum) {
-    this._reference_vendored_enum = reference_vendored_enum;
-    this.__isset_reference_vendored_enum = true;
-  }
-
-  bool isSetReference_vendored_enum() => this.__isset_reference_vendored_enum;
-
-  unsetReference_vendored_enum() {
-    this.__isset_reference_vendored_enum = false;
-  }
+  @deprecated
+  unsetReference_vendored_enum() => reference_vendored_enum = null;
 
   @override
   getFieldValue(int fieldID) {
@@ -69,18 +53,22 @@ class VendoredReferences implements thrift.TBase {
     switch (fieldID) {
       case REFERENCE_VENDORED_CONST:
         if (value == null) {
-          unsetReference_vendored_const();
-        } else {
-          this.reference_vendored_const = value as int;
+          reference_vendored_const = null;
+        } else {          if (value is int) {
+            reference_vendored_const = value;
+          }
         }
+
         break;
 
       case REFERENCE_VENDORED_ENUM:
         if (value == null) {
-          unsetReference_vendored_enum();
-        } else {
-          this.reference_vendored_enum = value as int;
+          reference_vendored_enum = null;
+        } else {          if (value is int) {
+            reference_vendored_enum = value;
+          }
         }
+
         break;
 
       default:
@@ -93,9 +81,11 @@ class VendoredReferences implements thrift.TBase {
   bool isSet(int fieldID) {
     switch (fieldID) {
       case REFERENCE_VENDORED_CONST:
-        return isSetReference_vendored_const();
+        return reference_vendored_const == null;
+
       case REFERENCE_VENDORED_ENUM:
-        return isSetReference_vendored_enum();
+        return reference_vendored_enum == null;
+
       default:
         throw new ArgumentError("Field $fieldID doesn't exist!");
     }
@@ -111,7 +101,6 @@ class VendoredReferences implements thrift.TBase {
         case REFERENCE_VENDORED_CONST:
           if (field.type == thrift.TType.I32) {
             reference_vendored_const = iprot.readI32();
-            this.__isset_reference_vendored_const = true;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -119,7 +108,7 @@ class VendoredReferences implements thrift.TBase {
         case REFERENCE_VENDORED_ENUM:
           if (field.type == thrift.TType.I32) {
             reference_vendored_enum = iprot.readI32();
-            this.__isset_reference_vendored_enum = true;
+            reference_vendored_enum = null;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -132,7 +121,6 @@ class VendoredReferences implements thrift.TBase {
     }
     iprot.readStructEnd();
 
-    // check for required fields of primitive type, which can't be checked in the validate method
     validate();
   }
 
@@ -141,12 +129,12 @@ class VendoredReferences implements thrift.TBase {
     validate();
 
     oprot.writeStructBegin(_STRUCT_DESC);
-    if (isSetReference_vendored_const()) {
+    if (Reference_vendored_const != null) {
       oprot.writeFieldBegin(_REFERENCE_VENDORED_CONST_FIELD_DESC);
       oprot.writeI32(reference_vendored_const);
       oprot.writeFieldEnd();
     }
-    if (isSetReference_vendored_enum()) {
+    if (Reference_vendored_enum != null) {
       oprot.writeFieldBegin(_REFERENCE_VENDORED_ENUM_FIELD_DESC);
       oprot.writeI32(reference_vendored_enum);
       oprot.writeFieldEnd();
@@ -159,12 +147,12 @@ class VendoredReferences implements thrift.TBase {
   String toString() {
     StringBuffer ret = new StringBuffer("VendoredReferences(");
 
-    if (isSetReference_vendored_const()) {
+    if (Reference_vendored_const != null) {
       ret.write("reference_vendored_const:");
       ret.write(this.reference_vendored_const);
     }
 
-    if (isSetReference_vendored_enum()) {
+    if (Reference_vendored_enum != null) {
       ret.write(", ");
       ret.write("reference_vendored_enum:");
       String reference_vendored_enum_name = t_vendor_namespace.MyEnum.VALUES_TO_NAMES[this.reference_vendored_enum];
@@ -210,9 +198,7 @@ class VendoredReferences implements thrift.TBase {
   }
 
   validate() {
-    // check for required fields
-    // check that fields of type enum have valid values
-    if (isSetReference_vendored_enum() && !t_vendor_namespace.MyEnum.VALID_VALUES.contains(reference_vendored_enum)) {
+    if (reference_vendored_enum != null && !t_vendor_namespace.MyEnum.VALID_VALUES.contains(reference_vendored_enum)) {
       throw new thrift.TProtocolError(thrift.TProtocolErrorType.INVALID_DATA, "The field 'reference_vendored_enum' has been assigned the invalid value $reference_vendored_enum");
     }
   }

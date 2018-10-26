@@ -16,98 +16,58 @@ class Track implements thrift.TBase {
   static final thrift.TField _DURATION_FIELD_DESC = new thrift.TField("duration", thrift.TType.DOUBLE, 5);
   static final thrift.TField _PRO_FIELD_DESC = new thrift.TField("pro", thrift.TType.I32, 6);
 
-  String _title;
+  String title;
   static const int TITLE = 1;
-  String _artist;
+  String artist;
   static const int ARTIST = 2;
-  String _publisher;
+  String publisher;
   static const int PUBLISHER = 3;
-  String _composer;
+  String composer;
   static const int COMPOSER = 4;
-  double _duration = 0.0;
+  double duration = 0.0;
   static const int DURATION = 5;
-  int _pro;
+  int pro;
   static const int PRO = 6;
 
-  bool __isset_duration = false;
-  bool __isset_pro = false;
 
   Track() {
   }
 
-  String get title => this._title;
+  @deprecated
+  bool isSetTitle() => title == null;
 
-  set title(String title) {
-    this._title = title;
-  }
+  @deprecated
+  unsetTitle() => title = null;
 
-  bool isSetTitle() => this.title != null;
+  @deprecated
+  bool isSetArtist() => artist == null;
 
-  unsetTitle() {
-    this.title = null;
-  }
+  @deprecated
+  unsetArtist() => artist = null;
 
-  String get artist => this._artist;
+  @deprecated
+  bool isSetPublisher() => publisher == null;
 
-  set artist(String artist) {
-    this._artist = artist;
-  }
+  @deprecated
+  unsetPublisher() => publisher = null;
 
-  bool isSetArtist() => this.artist != null;
+  @deprecated
+  bool isSetComposer() => composer == null;
 
-  unsetArtist() {
-    this.artist = null;
-  }
+  @deprecated
+  unsetComposer() => composer = null;
 
-  String get publisher => this._publisher;
+  @deprecated
+  bool isSetDuration() => duration == null;
 
-  set publisher(String publisher) {
-    this._publisher = publisher;
-  }
+  @deprecated
+  unsetDuration() => duration = null;
 
-  bool isSetPublisher() => this.publisher != null;
+  @deprecated
+  bool isSetPro() => pro == null;
 
-  unsetPublisher() {
-    this.publisher = null;
-  }
-
-  String get composer => this._composer;
-
-  set composer(String composer) {
-    this._composer = composer;
-  }
-
-  bool isSetComposer() => this.composer != null;
-
-  unsetComposer() {
-    this.composer = null;
-  }
-
-  double get duration => this._duration;
-
-  set duration(double duration) {
-    this._duration = duration;
-    this.__isset_duration = true;
-  }
-
-  bool isSetDuration() => this.__isset_duration;
-
-  unsetDuration() {
-    this.__isset_duration = false;
-  }
-
-  int get pro => this._pro;
-
-  set pro(int pro) {
-    this._pro = pro;
-    this.__isset_pro = true;
-  }
-
-  bool isSetPro() => this.__isset_pro;
-
-  unsetPro() {
-    this.__isset_pro = false;
-  }
+  @deprecated
+  unsetPro() => pro = null;
 
   @override
   getFieldValue(int fieldID) {
@@ -134,50 +94,62 @@ class Track implements thrift.TBase {
     switch (fieldID) {
       case TITLE:
         if (value == null) {
-          unsetTitle();
-        } else {
-          this.title = value as String;
+          title = null;
+        } else {          if (value is String) {
+            title = value;
+          }
         }
+
         break;
 
       case ARTIST:
         if (value == null) {
-          unsetArtist();
-        } else {
-          this.artist = value as String;
+          artist = null;
+        } else {          if (value is String) {
+            artist = value;
+          }
         }
+
         break;
 
       case PUBLISHER:
         if (value == null) {
-          unsetPublisher();
-        } else {
-          this.publisher = value as String;
+          publisher = null;
+        } else {          if (value is String) {
+            publisher = value;
+          }
         }
+
         break;
 
       case COMPOSER:
         if (value == null) {
-          unsetComposer();
-        } else {
-          this.composer = value as String;
+          composer = null;
+        } else {          if (value is String) {
+            composer = value;
+          }
         }
+
         break;
 
       case DURATION:
         if (value == null) {
-          unsetDuration();
-        } else {
-          this.duration = value as double;
+          duration = null;
+        } else {          if (value is double) {
+            duration = value;
+          }
         }
+
         break;
 
       case PRO:
         if (value == null) {
-          unsetPro();
-        } else {
-          this.pro = value as int;
+          pro = null;
+        } else {          if (value is int) {
+            pro = value;
+          }
         }
+
         break;
 
       default:
@@ -190,17 +162,23 @@ class Track implements thrift.TBase {
   bool isSet(int fieldID) {
     switch (fieldID) {
       case TITLE:
-        return isSetTitle();
+        return title == null;
+
       case ARTIST:
-        return isSetArtist();
+        return artist == null;
+
       case PUBLISHER:
-        return isSetPublisher();
+        return publisher == null;
+
       case COMPOSER:
-        return isSetComposer();
+        return composer == null;
+
       case DURATION:
-        return isSetDuration();
+        return duration == null;
+
       case PRO:
-        return isSetPro();
+        return pro == null;
+
       default:
         throw new ArgumentError("Field $fieldID doesn't exist!");
     }
@@ -244,7 +222,6 @@ class Track implements thrift.TBase {
         case DURATION:
           if (field.type == thrift.TType.DOUBLE) {
             duration = iprot.readDouble();
-            this.__isset_duration = true;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -252,7 +229,7 @@ class Track implements thrift.TBase {
         case PRO:
           if (field.type == thrift.TType.I32) {
             pro = iprot.readI32();
-            this.__isset_pro = true;
+            pro = null;
           } else {
             thrift.TProtocolUtil.skip(iprot, field.type);
           }
@@ -265,7 +242,6 @@ class Track implements thrift.TBase {
     }
     iprot.readStructEnd();
 
-    // check for required fields of primitive type, which can't be checked in the validate method
     validate();
   }
 
@@ -403,9 +379,7 @@ class Track implements thrift.TBase {
   }
 
   validate() {
-    // check for required fields
-    // check that fields of type enum have valid values
-    if (isSetPro() && !t_v1_music.PerfRightsOrg.VALID_VALUES.contains(pro)) {
+    if (pro != null && !t_v1_music.PerfRightsOrg.VALID_VALUES.contains(pro)) {
       throw new thrift.TProtocolError(thrift.TProtocolErrorType.INVALID_DATA, "The field 'pro' has been assigned the invalid value $pro");
     }
   }
