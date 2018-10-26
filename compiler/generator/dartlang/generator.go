@@ -1483,8 +1483,6 @@ func (g *Generator) GenerateSubscriber(file *os.File, scope *parser.Scope) error
 
 		subscribers += fmt.Sprintf(tab+"frugal.FAsyncCallback _recv%s(String op, frugal.FProtocolFactory protocolFactory, dynamic on%s(frugal.FContext ctx, %s req)) {\n",
 			op.Name, op.Type.ParamName(), g.getDartTypeFromThriftType(op.Type))
-		subscribers += fmt.Sprintf(tabtab+"frugal.FMethod method = new frugal.FMethod(on%s, '%s', 'subscribe%s', this._middleware);\n",
-			op.Type.ParamName(), strings.Title(scope.Name), op.Type.ParamName())
 		subscribers += fmt.Sprintf(tabtab+"callback%s(thrift.TTransport transport) {\n", op.Name)
 
 		subscribers += tabtabtab + "var iprot = protocolFactory.getProtocol(transport);\n"
@@ -1498,7 +1496,8 @@ func (g *Generator) GenerateSubscriber(file *os.File, scope *parser.Scope) error
 		subscribers += tabtabtab + "}\n"
 		subscribers += g.generateReadFieldRec(parser.FieldFromType(op.Type, "req"), false, tabtabtab)
 		subscribers += tabtabtab + "iprot.readMessageEnd();\n"
-		subscribers += tabtabtab + "method([ctx, req]);\n"
+		subscribers += fmt.Sprintf(tabtabtab+"frugal.composeMiddleware(on%s, _middleware)('%s', 'subscribe%s', [ctx, req]);\n",
+			op.Type.ParamName(), strings.Title(scope.Name), op.Type.ParamName())
 		subscribers += tabtab + "}\n"
 		subscribers += fmt.Sprintf(tabtab+"return callback%s;\n", op.Name)
 		subscribers += tab + "}\n"

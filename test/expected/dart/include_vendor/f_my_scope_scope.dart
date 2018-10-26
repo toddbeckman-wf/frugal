@@ -73,7 +73,6 @@ class MyScopeSubscriber {
   }
 
   frugal.FAsyncCallback _recvnewItem(String op, frugal.FProtocolFactory protocolFactory, dynamic onItem(frugal.FContext ctx, t_vendor_namespace.Item req)) {
-    frugal.FMethod method = new frugal.FMethod(onItem, 'MyScope', 'subscribeItem', this._middleware);
     callbacknewItem(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -87,7 +86,7 @@ class MyScopeSubscriber {
       t_vendor_namespace.Item req = new t_vendor_namespace.Item();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onItem, _middleware)('MyScope', 'subscribeItem', [ctx, req]);
     }
     return callbacknewItem;
   }

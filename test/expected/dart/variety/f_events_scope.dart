@@ -150,7 +150,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvEventCreated(String op, frugal.FProtocolFactory protocolFactory, dynamic onEvent(frugal.FContext ctx, t_variety.Event req)) {
-    frugal.FMethod method = new frugal.FMethod(onEvent, 'Events', 'subscribeEvent', this._middleware);
     callbackEventCreated(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -164,7 +163,7 @@ class EventsSubscriber {
       t_variety.Event req = new t_variety.Event();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onEvent, _middleware)('Events', 'subscribeEvent', [ctx, req]);
     }
     return callbackEventCreated;
   }
@@ -180,7 +179,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeInt(String op, frugal.FProtocolFactory protocolFactory, dynamic oni64(frugal.FContext ctx, int req)) {
-    frugal.FMethod method = new frugal.FMethod(oni64, 'Events', 'subscribei64', this._middleware);
     callbackSomeInt(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -193,7 +191,7 @@ class EventsSubscriber {
       }
       int req = iprot.readI64();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(oni64, _middleware)('Events', 'subscribei64', [ctx, req]);
     }
     return callbackSomeInt;
   }
@@ -209,7 +207,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeStr(String op, frugal.FProtocolFactory protocolFactory, dynamic onstring(frugal.FContext ctx, String req)) {
-    frugal.FMethod method = new frugal.FMethod(onstring, 'Events', 'subscribestring', this._middleware);
     callbackSomeStr(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -222,7 +219,7 @@ class EventsSubscriber {
       }
       String req = iprot.readString();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onstring, _middleware)('Events', 'subscribestring', [ctx, req]);
     }
     return callbackSomeStr;
   }
@@ -238,7 +235,6 @@ class EventsSubscriber {
   }
 
   frugal.FAsyncCallback _recvSomeList(String op, frugal.FProtocolFactory protocolFactory, dynamic onlist(frugal.FContext ctx, List<Map<int, t_variety.Event>> req)) {
-    frugal.FMethod method = new frugal.FMethod(onlist, 'Events', 'subscribelist', this._middleware);
     callbackSomeList(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -265,7 +261,7 @@ class EventsSubscriber {
       }
       iprot.readListEnd();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onlist, _middleware)('Events', 'subscribelist', [ctx, req]);
     }
     return callbackSomeList;
   }

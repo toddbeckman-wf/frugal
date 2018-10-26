@@ -120,7 +120,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvContestStart(String op, frugal.FProtocolFactory protocolFactory, dynamic onlist(frugal.FContext ctx, List<t_v1_music.Album> req)) {
-    frugal.FMethod method = new frugal.FMethod(onlist, 'AlbumWinners', 'subscribelist', this._middleware);
     callbackContestStart(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -140,7 +139,7 @@ class AlbumWinnersSubscriber {
       }
       iprot.readListEnd();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onlist, _middleware)('AlbumWinners', 'subscribelist', [ctx, req]);
     }
     return callbackContestStart;
   }
@@ -156,7 +155,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvTimeLeft(String op, frugal.FProtocolFactory protocolFactory, dynamic onMinutes(frugal.FContext ctx, double req)) {
-    frugal.FMethod method = new frugal.FMethod(onMinutes, 'AlbumWinners', 'subscribeMinutes', this._middleware);
     callbackTimeLeft(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -169,7 +167,7 @@ class AlbumWinnersSubscriber {
       }
       double req = iprot.readDouble();
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onMinutes, _middleware)('AlbumWinners', 'subscribeMinutes', [ctx, req]);
     }
     return callbackTimeLeft;
   }
@@ -185,7 +183,6 @@ class AlbumWinnersSubscriber {
   }
 
   frugal.FAsyncCallback _recvWinner(String op, frugal.FProtocolFactory protocolFactory, dynamic onAlbum(frugal.FContext ctx, t_v1_music.Album req)) {
-    frugal.FMethod method = new frugal.FMethod(onAlbum, 'AlbumWinners', 'subscribeAlbum', this._middleware);
     callbackWinner(thrift.TTransport transport) {
       var iprot = protocolFactory.getProtocol(transport);
       var ctx = iprot.readRequestHeader();
@@ -199,7 +196,7 @@ class AlbumWinnersSubscriber {
       t_v1_music.Album req = new t_v1_music.Album();
       req.read(iprot);
       iprot.readMessageEnd();
-      method([ctx, req]);
+      frugal.composeMiddleware(onAlbum, _middleware)('AlbumWinners', 'subscribeAlbum', [ctx, req]);
     }
     return callbackWinner;
   }
