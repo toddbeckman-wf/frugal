@@ -26,8 +26,24 @@ typedef Future InvocationHandler(
 /// proxies the given [InvocationHandler].
 typedef InvocationHandler Middleware(InvocationHandler handler);
 
+/// Applies the [Middleware] to the provided method.
+InvocationHandler composeMiddleware(dynamic f, List<Middleware> middleware) {
+  InvocationHandler handler =
+      (String serviceName, String methodName, List<Object> args) {
+    Future actual = Function.apply(f, args);
+    return actual;
+  };
+
+  if (middleware == null) {
+    return handler;
+  }
+  // ignore: STRONG_MODE_DOWN_CAST_COMPOSITE
+  return middleware.fold(handler, (prev, element) => element(prev));
+}
+
 /// Contains an [InvocationHandler] used to proxy the given service method
 /// This should only be used by generated code.
+@deprecated
 class FMethod {
   String _serviceName;
   String _methodName;
@@ -49,19 +65,9 @@ class FMethod {
   }
 
   /// Applies the [Middleware] to the provided method.
-  InvocationHandler _composeMiddleware(dynamic f, List<Middleware> middleware) {
-    InvocationHandler handler =
-        (String serviceName, String methodName, List<Object> args) {
-      Future actual = Function.apply(f, args);
-      return actual;
-    };
-
-    if (middleware == null) {
-      return handler;
-    }
-    // ignore: STRONG_MODE_DOWN_CAST_COMPOSITE
-    return middleware.fold(handler, (prev, element) => element(prev));
-  }
+  InvocationHandler _composeMiddleware(
+          dynamic f, List<Middleware> middleware) =>
+      composeMiddleware(f, middleware);
 }
 
 /// [Middleware] for debugging that logs the requests and responses in json

@@ -55,18 +55,6 @@ abstract class FFoo extends t_actual_base_dart.FBaseFoo {
 /// a frugal Context for each service call.
 class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   static final logging.Logger _frugalLog = new logging.Logger('Foo');
-  frugal.FMethod _ping_fmethod;
-  frugal.FMethod _blah_fmethod;
-  frugal.FMethod _oneWay_fmethod;
-  frugal.FMethod _bin_method_fmethod;
-  frugal.FMethod _param_modifiers_fmethod;
-  frugal.FMethod _underlying_types_test_fmethod;
-  frugal.FMethod _getThing_fmethod;
-  frugal.FMethod _getMyInt_fmethod;
-  frugal.FMethod _use_subdir_struct_fmethod;
-  frugal.FMethod _sayHelloWith_fmethod;
-  frugal.FMethod _whatDoYouSay_fmethod;
-  frugal.FMethod _sayAgain_fmethod;
   List<frugal.Middleware> _combinedMiddleware;
   FFooClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware])
       : super(provider, middleware) {
@@ -84,10 +72,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   @deprecated
   Future ping(frugal.FContext ctx) {
     _frugalLog.warning("Call to deprecated function 'Foo.ping'");
-    if (_ping_fmethod == null) {
-      _ping_fmethod = new frugal.FMethod(this._ping, 'Foo', 'ping', _combinedMiddleware);
-    }
-    return _ping_fmethod([ctx]) as Future;
+    return frugal.composeMiddleware(_ping, _combinedMiddleware)('Foo', 'ping', [ctx]) as Future;
   }
 
   Future _ping(frugal.FContext ctx) async {
@@ -118,10 +103,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   /// Blah the server.
   Future<int> blah(frugal.FContext ctx, int num, String str, t_variety.Event event) {
-    if (_blah_fmethod == null) {
-      _blah_fmethod = new frugal.FMethod(this._blah, 'Foo', 'blah', _combinedMiddleware);
-    }
-    return _blah_fmethod([ctx, num, str, event]) as Future<int>;
+    return frugal.composeMiddleware(_blah, _combinedMiddleware)('Foo', 'blah', [ctx, num, str, event]) as Future<int>;
   }
 
   Future<int> _blah(frugal.FContext ctx, int num, String str, t_variety.Event event) async {
@@ -168,10 +150,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
   /// oneway methods don't receive a response from the server.
   Future oneWay(frugal.FContext ctx, int id, Map<int, String> req) {
-    if (_oneWay_fmethod == null) {
-      _oneWay_fmethod = new frugal.FMethod(this._oneWay, 'Foo', 'oneWay', _combinedMiddleware);
-    }
-    return _oneWay_fmethod([ctx, id, req]) as Future;
+    return frugal.composeMiddleware(_oneWay, _combinedMiddleware)('Foo', 'oneWay', [ctx, id, req]) as Future;
   }
 
   Future _oneWay(frugal.FContext ctx, int id, Map<int, String> req) async {
@@ -188,10 +167,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
   }
 
   Future<Uint8List> bin_method(frugal.FContext ctx, Uint8List bin, String str) {
-    if (_bin_method_fmethod == null) {
-      _bin_method_fmethod = new frugal.FMethod(this._bin_method, 'Foo', 'bin_method', _combinedMiddleware);
-    }
-    return _bin_method_fmethod([ctx, bin, str]) as Future<Uint8List>;
+    return frugal.composeMiddleware(_bin_method, _combinedMiddleware)('Foo', 'bin_method', [ctx, bin, str]) as Future<Uint8List>;
   }
 
   Future<Uint8List> _bin_method(frugal.FContext ctx, Uint8List bin, String str) async {
@@ -233,10 +209,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<int> param_modifiers(frugal.FContext ctx, int opt_num, int default_num, int req_num) {
-    if (_param_modifiers_fmethod == null) {
-      _param_modifiers_fmethod = new frugal.FMethod(this._param_modifiers, 'Foo', 'param_modifiers', _combinedMiddleware);
-    }
-    return _param_modifiers_fmethod([ctx, opt_num, default_num, req_num]) as Future<int>;
+    return frugal.composeMiddleware(_param_modifiers, _combinedMiddleware)('Foo', 'param_modifiers', [ctx, opt_num, default_num, req_num]) as Future<int>;
   }
 
   Future<int> _param_modifiers(frugal.FContext ctx, int opt_num, int default_num, int req_num) async {
@@ -276,10 +249,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<List<int>> underlying_types_test(frugal.FContext ctx, List<int> list_type, Set<int> set_type) {
-    if (_underlying_types_test_fmethod == null) {
-      _underlying_types_test_fmethod = new frugal.FMethod(this._underlying_types_test, 'Foo', 'underlying_types_test', _combinedMiddleware);
-    }
-    return _underlying_types_test_fmethod([ctx, list_type, set_type]) as Future<List<int>>;
+    return frugal.composeMiddleware(_underlying_types_test, _combinedMiddleware)('Foo', 'underlying_types_test', [ctx, list_type, set_type]) as Future<List<int>>;
   }
 
   Future<List<int>> _underlying_types_test(frugal.FContext ctx, List<int> list_type, Set<int> set_type) async {
@@ -318,10 +288,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<t_validStructs.Thing> getThing(frugal.FContext ctx) {
-    if (_getThing_fmethod == null) {
-      _getThing_fmethod = new frugal.FMethod(this._getThing, 'Foo', 'getThing', _combinedMiddleware);
-    }
-    return _getThing_fmethod([ctx]) as Future<t_validStructs.Thing>;
+    return frugal.composeMiddleware(_getThing, _combinedMiddleware)('Foo', 'getThing', [ctx]) as Future<t_validStructs.Thing>;
   }
 
   Future<t_validStructs.Thing> _getThing(frugal.FContext ctx) async {
@@ -358,10 +325,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<int> getMyInt(frugal.FContext ctx) {
-    if (_getMyInt_fmethod == null) {
-      _getMyInt_fmethod = new frugal.FMethod(this._getMyInt, 'Foo', 'getMyInt', _combinedMiddleware);
-    }
-    return _getMyInt_fmethod([ctx]) as Future<int>;
+    return frugal.composeMiddleware(_getMyInt, _combinedMiddleware)('Foo', 'getMyInt', [ctx]) as Future<int>;
   }
 
   Future<int> _getMyInt(frugal.FContext ctx) async {
@@ -398,10 +362,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<t_subdir_include_ns.A> use_subdir_struct(frugal.FContext ctx, t_subdir_include_ns.A a) {
-    if (_use_subdir_struct_fmethod == null) {
-      _use_subdir_struct_fmethod = new frugal.FMethod(this._use_subdir_struct, 'Foo', 'use_subdir_struct', _combinedMiddleware);
-    }
-    return _use_subdir_struct_fmethod([ctx, a]) as Future<t_subdir_include_ns.A>;
+    return frugal.composeMiddleware(_use_subdir_struct, _combinedMiddleware)('Foo', 'use_subdir_struct', [ctx, a]) as Future<t_subdir_include_ns.A>;
   }
 
   Future<t_subdir_include_ns.A> _use_subdir_struct(frugal.FContext ctx, t_subdir_include_ns.A a) async {
@@ -439,10 +400,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<String> sayHelloWith(frugal.FContext ctx, String newMessage) {
-    if (_sayHelloWith_fmethod == null) {
-      _sayHelloWith_fmethod = new frugal.FMethod(this._sayHelloWith, 'Foo', 'sayHelloWith', _combinedMiddleware);
-    }
-    return _sayHelloWith_fmethod([ctx, newMessage]) as Future<String>;
+    return frugal.composeMiddleware(_sayHelloWith, _combinedMiddleware)('Foo', 'sayHelloWith', [ctx, newMessage]) as Future<String>;
   }
 
   Future<String> _sayHelloWith(frugal.FContext ctx, String newMessage) async {
@@ -480,10 +438,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<String> whatDoYouSay(frugal.FContext ctx, String messageArgs) {
-    if (_whatDoYouSay_fmethod == null) {
-      _whatDoYouSay_fmethod = new frugal.FMethod(this._whatDoYouSay, 'Foo', 'whatDoYouSay', _combinedMiddleware);
-    }
-    return _whatDoYouSay_fmethod([ctx, messageArgs]) as Future<String>;
+    return frugal.composeMiddleware(_whatDoYouSay, _combinedMiddleware)('Foo', 'whatDoYouSay', [ctx, messageArgs]) as Future<String>;
   }
 
   Future<String> _whatDoYouSay(frugal.FContext ctx, String messageArgs) async {
@@ -521,10 +476,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     );
   }
   Future<String> sayAgain(frugal.FContext ctx, String messageResult) {
-    if (_sayAgain_fmethod == null) {
-      _sayAgain_fmethod = new frugal.FMethod(this._sayAgain, 'Foo', 'sayAgain', _combinedMiddleware);
-    }
-    return _sayAgain_fmethod([ctx, messageResult]) as Future<String>;
+    return frugal.composeMiddleware(_sayAgain, _combinedMiddleware)('Foo', 'sayAgain', [ctx, messageResult]) as Future<String>;
   }
 
   Future<String> _sayAgain(frugal.FContext ctx, String messageResult) async {
