@@ -20,16 +20,15 @@ const String delimiter = '.';
 class AlbumWinnersPublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
-  Map<String, frugal.FMethod> _methods;
+  List<frugal.Middleware> _combinedMiddleware;
+  frugal.FMethod _ContestStart_fmethod;
+  frugal.FMethod _TimeLeft_fmethod;
+  frugal.FMethod _Winner_fmethod;
   AlbumWinnersPublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['ContestStart'] = new frugal.FMethod(this._publishContestStart, 'AlbumWinners', 'publishContestStart', combined);
-    this._methods['TimeLeft'] = new frugal.FMethod(this._publishTimeLeft, 'AlbumWinners', 'publishTimeLeft', combined);
-    this._methods['Winner'] = new frugal.FMethod(this._publishWinner, 'AlbumWinners', 'publishWinner', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   Future open() {
@@ -41,7 +40,10 @@ class AlbumWinnersPublisher {
   }
 
   Future publishContestStart(frugal.FContext ctx, List<t_v1_music.Album> req) {
-    return this._methods['ContestStart']([ctx, req]);
+    if (_ContestStart_fmethod == null) {
+      _ContestStart_fmethod = new frugal.FMethod(this._publishContestStart, 'AlbumWinners', 'publishContestStart', _combinedMiddleware);
+    }
+    return _ContestStart_fmethod([ctx, req]);
   }
 
   Future _publishContestStart(frugal.FContext ctx, List<t_v1_music.Album> req) async {
@@ -64,7 +66,10 @@ class AlbumWinnersPublisher {
 
 
   Future publishTimeLeft(frugal.FContext ctx, double req) {
-    return this._methods['TimeLeft']([ctx, req]);
+    if (_TimeLeft_fmethod == null) {
+      _TimeLeft_fmethod = new frugal.FMethod(this._publishTimeLeft, 'AlbumWinners', 'publishTimeLeft', _combinedMiddleware);
+    }
+    return _TimeLeft_fmethod([ctx, req]);
   }
 
   Future _publishTimeLeft(frugal.FContext ctx, double req) async {
@@ -83,7 +88,10 @@ class AlbumWinnersPublisher {
 
 
   Future publishWinner(frugal.FContext ctx, t_v1_music.Album req) {
-    return this._methods['Winner']([ctx, req]);
+    if (_Winner_fmethod == null) {
+      _Winner_fmethod = new frugal.FMethod(this._publishWinner, 'AlbumWinners', 'publishWinner', _combinedMiddleware);
+    }
+    return _Winner_fmethod([ctx, req]);
   }
 
   Future _publishWinner(frugal.FContext ctx, t_v1_music.Album req) async {

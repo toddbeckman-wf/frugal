@@ -28,23 +28,24 @@ abstract class FStore {
 /// Users can buy an album or enter a giveaway for a free album.
 class FStoreClient implements FStore {
   static final logging.Logger _frugalLog = new logging.Logger('Store');
-  Map<String, frugal.FMethod> _methods;
-
+  frugal.FMethod _buyAlbum_fmethod;
+  frugal.FMethod _enterAlbumGiveaway_fmethod;
+  List<frugal.Middleware> _combinedMiddleware;
   FStoreClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['buyAlbum'] = new frugal.FMethod(this._buyAlbum, 'Store', 'buyAlbum', combined);
-    this._methods['enterAlbumGiveaway'] = new frugal.FMethod(this._enterAlbumGiveaway, 'Store', 'enterAlbumGiveaway', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;
   frugal.FProtocolFactory _protocolFactory;
 
   Future<t_v1_music.Album> buyAlbum(frugal.FContext ctx, String aSIN, String acct) {
-    return this._methods['buyAlbum']([ctx, aSIN, acct]) as Future<t_v1_music.Album>;
+    if (_buyAlbum_fmethod == null) {
+      _buyAlbum_fmethod = new frugal.FMethod(this._buyAlbum, 'Store', 'buyAlbum', _combinedMiddleware);
+    }
+    return _buyAlbum_fmethod([ctx, aSIN, acct]) as Future<t_v1_music.Album>;
   }
 
   Future<t_v1_music.Album> _buyAlbum(frugal.FContext ctx, String aSIN, String acct) async {
@@ -89,7 +90,10 @@ class FStoreClient implements FStore {
   @deprecated
   Future<bool> enterAlbumGiveaway(frugal.FContext ctx, String email, String name) {
     _frugalLog.warning("Call to deprecated function 'Store.enterAlbumGiveaway'");
-    return this._methods['enterAlbumGiveaway']([ctx, email, name]) as Future<bool>;
+    if (_enterAlbumGiveaway_fmethod == null) {
+      _enterAlbumGiveaway_fmethod = new frugal.FMethod(this._enterAlbumGiveaway, 'Store', 'enterAlbumGiveaway', _combinedMiddleware);
+    }
+    return _enterAlbumGiveaway_fmethod([ctx, email, name]) as Future<bool>;
   }
 
   Future<bool> _enterAlbumGiveaway(frugal.FContext ctx, String email, String name) async {

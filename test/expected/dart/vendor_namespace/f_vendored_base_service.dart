@@ -18,14 +18,12 @@ abstract class FVendoredBase {
 
 class FVendoredBaseClient implements FVendoredBase {
   static final logging.Logger _frugalLog = new logging.Logger('VendoredBase');
-  Map<String, frugal.FMethod> _methods;
-
+  List<frugal.Middleware> _combinedMiddleware;
   FVendoredBaseClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;

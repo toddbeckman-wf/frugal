@@ -20,22 +20,23 @@ abstract class FBaseFoo {
 
 class FBaseFooClient implements FBaseFoo {
   static final logging.Logger _frugalLog = new logging.Logger('BaseFoo');
-  Map<String, frugal.FMethod> _methods;
-
+  frugal.FMethod _basePing_fmethod;
+  List<frugal.Middleware> _combinedMiddleware;
   FBaseFooClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
-    var combined = middleware ?? [];
-    combined.addAll(provider.middleware);
-    this._methods = {};
-    this._methods['basePing'] = new frugal.FMethod(this._basePing, 'BaseFoo', 'basePing', combined);
+    _combinedMiddleware = middleware ?? [];
+    _combinedMiddleware.addAll(provider.middleware);
   }
 
   frugal.FTransport _transport;
   frugal.FProtocolFactory _protocolFactory;
 
   Future basePing(frugal.FContext ctx) {
-    return this._methods['basePing']([ctx]) as Future;
+    if (_basePing_fmethod == null) {
+      _basePing_fmethod = new frugal.FMethod(this._basePing, 'BaseFoo', 'basePing', _combinedMiddleware);
+    }
+    return _basePing_fmethod([ctx]) as Future;
   }
 
   Future _basePing(frugal.FContext ctx) async {
