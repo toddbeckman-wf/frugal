@@ -43,7 +43,6 @@ InvocationHandler composeMiddleware(dynamic f, List<Middleware> middleware) {
 
 /// Contains an [InvocationHandler] used to proxy the given service method
 /// This should only be used by generated code.
-@deprecated
 class FMethod {
   String _serviceName;
   String _methodName;
@@ -55,7 +54,7 @@ class FMethod {
       List<Middleware> middleware) {
     this._serviceName = serviceName;
     this._methodName = methodName;
-    this._handler = _composeMiddleware(f, middleware);
+    this._handler = composeMiddleware(f, middleware);
   }
 
   /// Invokes the proxied [InvocationHandler] with the given arguments and
@@ -63,11 +62,6 @@ class FMethod {
   Future call(List<Object> args) {
     return this._handler(this._serviceName, this._methodName, args);
   }
-
-  /// Applies the [Middleware] to the provided method.
-  InvocationHandler _composeMiddleware(
-          dynamic f, List<Middleware> middleware) =>
-      composeMiddleware(f, middleware);
 }
 
 /// [Middleware] for debugging that logs the requests and responses in json

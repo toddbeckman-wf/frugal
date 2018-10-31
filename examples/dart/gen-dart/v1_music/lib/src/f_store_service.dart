@@ -29,6 +29,8 @@ abstract class FStore {
 class FStoreClient implements FStore {
   static final logging.Logger _frugalLog = new logging.Logger('Store');
   List<frugal.Middleware> _combinedMiddleware;
+  frugal.FMethod _buyAlbum_fmethod;
+  frugal.FMethod _enterAlbumGiveaway_fmethod;
   FStoreClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
@@ -40,7 +42,10 @@ class FStoreClient implements FStore {
   frugal.FProtocolFactory _protocolFactory;
 
   Future<t_v1_music.Album> buyAlbum(frugal.FContext ctx, String aSIN, String acct) {
-    return frugal.composeMiddleware(_buyAlbum, _combinedMiddleware)('Store', 'buyAlbum', [ctx, aSIN, acct]) as Future<t_v1_music.Album>;
+    if (_buyAlbum_fmethod == null) {
+      _buyAlbum_fmethod = new frugal.FMethod(this._buyAlbum, 'Store', 'buyAlbum', _combinedMiddleware);
+    }
+    return _buyAlbum_fmethod([ctx, aSIN, acct]) as Future<t_v1_music.Album>;
   }
 
   Future<t_v1_music.Album> _buyAlbum(frugal.FContext ctx, String aSIN, String acct) async {
@@ -85,7 +90,10 @@ class FStoreClient implements FStore {
   @deprecated
   Future<bool> enterAlbumGiveaway(frugal.FContext ctx, String email, String name) {
     _frugalLog.warning("Call to deprecated function 'Store.enterAlbumGiveaway'");
-    return frugal.composeMiddleware(_enterAlbumGiveaway, _combinedMiddleware)('Store', 'enterAlbumGiveaway', [ctx, email, name]) as Future<bool>;
+    if (_enterAlbumGiveaway_fmethod == null) {
+      _enterAlbumGiveaway_fmethod = new frugal.FMethod(this._enterAlbumGiveaway, 'Store', 'enterAlbumGiveaway', _combinedMiddleware);
+    }
+    return _enterAlbumGiveaway_fmethod([ctx, email, name]) as Future<bool>;
   }
 
   Future<bool> _enterAlbumGiveaway(frugal.FContext ctx, String email, String name) async {

@@ -1360,6 +1360,10 @@ func (g *Generator) GeneratePublisher(file *os.File, scope *parser.Scope) error 
 	publishers += tab + "frugal.FProtocolFactory protocolFactory;\n"
 	publishers += tab + "List<frugal.Middleware> _combinedMiddleware;\n"
 
+	for _, operation := range scope.Operations {
+		publishers += fmt.Sprintf(tab+"frugal.FMethod _%s_fmethod;\n", parser.LowercaseFirstLetter(operation.Name))
+	}
+
 	publishers += fmt.Sprintf(tab+"%sPublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {\n", strings.Title(scope.Name))
 	publishers += tabtab + "transport = provider.publisherTransportFactory.getTransport();\n"
 	publishers += tabtab + "protocolFactory = provider.protocolFactory;\n"
@@ -1393,8 +1397,13 @@ func (g *Generator) GeneratePublisher(file *os.File, scope *parser.Scope) error 
 
 		publishers += fmt.Sprintf(tab+"Future publish%s(frugal.FContext ctx, %s%s req) {\n", op.Name, args, g.getDartTypeFromThriftType(op.Type))
 
-		publishers += fmt.Sprintf(tabtab+"return frugal.composeMiddleware(_publish%s, _combinedMiddleware)('%s', 'publish%s', [ctx, %sreq]);\n",
-			op.Name, strings.Title(scope.Name), op.Name, argsWithoutTypes)
+		nameLower := parser.LowercaseFirstLetter(op.Name)
+		publishers += fmt.Sprintf(tabtab+"if (_%s_fmethod == null) {\n", nameLower)
+		publishers += fmt.Sprintf(tabtabtab+"_%s_fmethod = new frugal.FMethod(this._publish%s, '%s', 'publish%s', _combinedMiddleware);\n",
+			nameLower, op.Name, strings.Title(scope.Name), op.Name)
+		publishers += tabtab + "}\n"
+		publishers += fmt.Sprintf(tabtab+"return _%s_fmethod([ctx, %sreq]);\n", nameLower, argsWithoutTypes)
+
 		publishers += tab + "}\n\n"
 
 		publishers += fmt.Sprintf(tab+"Future _publish%s(frugal.FContext ctx, %s%s req) async {\n", op.Name, args, g.getDartTypeFromThriftType(op.Type))
@@ -1593,6 +1602,10 @@ func (g *Generator) generateClient(service *parser.Service) string {
 	}
 	contents += fmt.Sprintf(tab+"static final logging.Logger _frugalLog = new logging.Logger('%s');\n", servTitle)
 	contents += tab + "List<frugal.Middleware> _combinedMiddleware;\n"
+	for _, method := range service.Methods {
+		nameLower := parser.LowercaseFirstLetter(method.Name)
+		contents += fmt.Sprintf(tab+"frugal.FMethod _%s_fmethod;\n", nameLower)
+	}
 
 	if service.Extends != "" {
 		contents += tab + fmt.Sprintf("F%sClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware])\n", servTitle)
@@ -1630,12 +1643,13 @@ func (g *Generator) generateClientMethod(service *parser.Service, method *parser
 		contents += fmt.Sprintf(tabtab+"_frugalLog.warning(\"Call to deprecated function '%s.%s'\");\n", service.Name, nameLower)
 	}
 
-	contents += fmt.Sprintf(tabtab+"return frugal.composeMiddleware(_%s, _combinedMiddleware)('%s', '%s', [ctx%s]) as Future%s;\n",
-		nameLower,
-		strings.Title(service.Name),
-		nameLower,
-		g.generateInputArgsWithoutTypes(method.Arguments),
-		g.generateReturnArg(method))
+	contents += fmt.Sprintf(tabtab+"if (_%s_fmethod == null) {\n", nameLower)
+	contents += fmt.Sprintf(tabtabtab+"_%s_fmethod = new frugal.FMethod(this._%s, '%s', '%s', _combinedMiddleware);\n",
+		nameLower, nameLower, strings.Title(service.Name), nameLower)
+	contents += tabtab + "}\n"
+	contents += fmt.Sprintf(tabtab+"return _%s_fmethod([ctx%s]) as Future%s;\n",
+		nameLower, g.generateInputArgsWithoutTypes(method.Arguments), g.generateReturnArg(method))
+
 	contents += fmt.Sprintf(tab + "}\n\n")
 
 	// Generate the calling method

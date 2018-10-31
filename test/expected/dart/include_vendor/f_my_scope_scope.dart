@@ -19,6 +19,7 @@ class MyScopePublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
   List<frugal.Middleware> _combinedMiddleware;
+  frugal.FMethod _newItem_fmethod;
   MyScopePublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
@@ -35,7 +36,10 @@ class MyScopePublisher {
   }
 
   Future publishnewItem(frugal.FContext ctx, t_vendor_namespace.Item req) {
-    return frugal.composeMiddleware(_publishnewItem, _combinedMiddleware)('MyScope', 'publishnewItem', [ctx, req]);
+    if (_newItem_fmethod == null) {
+      _newItem_fmethod = new frugal.FMethod(this._publishnewItem, 'MyScope', 'publishnewItem', _combinedMiddleware);
+    }
+    return _newItem_fmethod([ctx, req]);
   }
 
   Future _publishnewItem(frugal.FContext ctx, t_vendor_namespace.Item req) async {

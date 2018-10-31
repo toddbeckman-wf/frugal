@@ -21,6 +21,10 @@ class EventsPublisher {
   frugal.FPublisherTransport transport;
   frugal.FProtocolFactory protocolFactory;
   List<frugal.Middleware> _combinedMiddleware;
+  frugal.FMethod _eventCreated_fmethod;
+  frugal.FMethod _someInt_fmethod;
+  frugal.FMethod _someStr_fmethod;
+  frugal.FMethod _someList_fmethod;
   EventsPublisher(frugal.FScopeProvider provider, [List<frugal.Middleware> middleware]) {
     transport = provider.publisherTransportFactory.getTransport();
     protocolFactory = provider.protocolFactory;
@@ -38,7 +42,10 @@ class EventsPublisher {
 
   /// This is a docstring.
   Future publishEventCreated(frugal.FContext ctx, String user, t_variety.Event req) {
-    return frugal.composeMiddleware(_publishEventCreated, _combinedMiddleware)('Events', 'publishEventCreated', [ctx, user, req]);
+    if (_eventCreated_fmethod == null) {
+      _eventCreated_fmethod = new frugal.FMethod(this._publishEventCreated, 'Events', 'publishEventCreated', _combinedMiddleware);
+    }
+    return _eventCreated_fmethod([ctx, user, req]);
   }
 
   Future _publishEventCreated(frugal.FContext ctx, String user, t_variety.Event req) async {
@@ -58,7 +65,10 @@ class EventsPublisher {
 
 
   Future publishSomeInt(frugal.FContext ctx, String user, int req) {
-    return frugal.composeMiddleware(_publishSomeInt, _combinedMiddleware)('Events', 'publishSomeInt', [ctx, user, req]);
+    if (_someInt_fmethod == null) {
+      _someInt_fmethod = new frugal.FMethod(this._publishSomeInt, 'Events', 'publishSomeInt', _combinedMiddleware);
+    }
+    return _someInt_fmethod([ctx, user, req]);
   }
 
   Future _publishSomeInt(frugal.FContext ctx, String user, int req) async {
@@ -78,7 +88,10 @@ class EventsPublisher {
 
 
   Future publishSomeStr(frugal.FContext ctx, String user, String req) {
-    return frugal.composeMiddleware(_publishSomeStr, _combinedMiddleware)('Events', 'publishSomeStr', [ctx, user, req]);
+    if (_someStr_fmethod == null) {
+      _someStr_fmethod = new frugal.FMethod(this._publishSomeStr, 'Events', 'publishSomeStr', _combinedMiddleware);
+    }
+    return _someStr_fmethod([ctx, user, req]);
   }
 
   Future _publishSomeStr(frugal.FContext ctx, String user, String req) async {
@@ -98,7 +111,10 @@ class EventsPublisher {
 
 
   Future publishSomeList(frugal.FContext ctx, String user, List<Map<int, t_variety.Event>> req) {
-    return frugal.composeMiddleware(_publishSomeList, _combinedMiddleware)('Events', 'publishSomeList', [ctx, user, req]);
+    if (_someList_fmethod == null) {
+      _someList_fmethod = new frugal.FMethod(this._publishSomeList, 'Events', 'publishSomeList', _combinedMiddleware);
+    }
+    return _someList_fmethod([ctx, user, req]);
   }
 
   Future _publishSomeList(frugal.FContext ctx, String user, List<Map<int, t_variety.Event>> req) async {

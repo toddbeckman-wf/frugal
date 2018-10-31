@@ -21,6 +21,7 @@ abstract class FBaseFoo {
 class FBaseFooClient implements FBaseFoo {
   static final logging.Logger _frugalLog = new logging.Logger('BaseFoo');
   List<frugal.Middleware> _combinedMiddleware;
+  frugal.FMethod _basePing_fmethod;
   FBaseFooClient(frugal.FServiceProvider provider, [List<frugal.Middleware> middleware]) {
     _transport = provider.transport;
     _protocolFactory = provider.protocolFactory;
@@ -32,7 +33,10 @@ class FBaseFooClient implements FBaseFoo {
   frugal.FProtocolFactory _protocolFactory;
 
   Future basePing(frugal.FContext ctx) {
-    return frugal.composeMiddleware(_basePing, _combinedMiddleware)('BaseFoo', 'basePing', [ctx]) as Future;
+    if (_basePing_fmethod == null) {
+      _basePing_fmethod = new frugal.FMethod(this._basePing, 'BaseFoo', 'basePing', _combinedMiddleware);
+    }
+    return _basePing_fmethod([ctx]) as Future;
   }
 
   Future _basePing(frugal.FContext ctx) async {
