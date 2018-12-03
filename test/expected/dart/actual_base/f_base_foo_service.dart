@@ -36,7 +36,7 @@ class FBaseFooClient implements FBaseFoo {
     if (_basePing_fmethod == null) {
       _basePing_fmethod = new frugal.FMethod(this._basePing, 'BaseFoo', 'basePing', _combinedMiddleware);
     }
-    return _basePing_fmethod([ctx]) as Future;
+    return _basePing_fmethod([ctx]);
   }
 
   Future _basePing(frugal.FContext ctx) async {

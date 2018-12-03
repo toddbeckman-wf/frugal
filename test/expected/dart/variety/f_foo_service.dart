@@ -87,7 +87,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     if (_ping_fmethod == null) {
       _ping_fmethod = new frugal.FMethod(this._ping, 'Foo', 'ping', _combinedMiddleware);
     }
-    return _ping_fmethod([ctx]) as Future;
+    return _ping_fmethod([ctx]);
   }
 
   Future _ping(frugal.FContext ctx) async {
@@ -175,7 +175,7 @@ class FFooClient extends t_actual_base_dart.FBaseFooClient implements FFoo {
     if (_oneWay_fmethod == null) {
       _oneWay_fmethod = new frugal.FMethod(this._oneWay, 'Foo', 'oneWay', _combinedMiddleware);
     }
-    return _oneWay_fmethod([ctx, id, req]) as Future;
+    return _oneWay_fmethod([ctx, id, req]);
   }
 
   Future _oneWay(frugal.FContext ctx, int id, Map<int, String> req) async {

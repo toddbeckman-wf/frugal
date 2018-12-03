@@ -1700,8 +1700,13 @@ func (g *Generator) generateClientMethod(service *parser.Service, method *parser
 	contents += fmt.Sprintf(tabtabtab+"_%s_fmethod = new frugal.FMethod(this._%s, '%s', '%s', _combinedMiddleware);\n",
 		nameLower, nameLower, strings.Title(service.Name), nameLower)
 	contents += tabtab + "}\n"
-	contents += fmt.Sprintf(tabtab+"return _%s_fmethod([ctx%s]) as Future%s;\n",
-		nameLower, g.generateInputArgsWithoutTypes(method.Arguments), g.generateReturnArg(method))
+
+	typeCast := ""
+	if returnType := g.generateReturnArg(method); returnType != "" {
+		typeCast = fmt.Sprintf(" as Future%s", returnType)
+	}
+	contents += fmt.Sprintf(tabtab+"return _%s_fmethod([ctx%s])%s;\n",
+		nameLower, g.generateInputArgsWithoutTypes(method.Arguments), typeCast)
 
 	contents += fmt.Sprintf(tab + "}\n\n")
 
