@@ -2933,7 +2933,7 @@ func (p *FooUnderlyingTypesTestArgs) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.ListType = make([]ID, 0, size)
+			p.ListType = make([]ID, size, size)
 			for i := 0; i < size; i++ {
 				var elem18 ID
 				if v, err := iprot.ReadI64(); err != nil {
@@ -2942,7 +2942,7 @@ func (p *FooUnderlyingTypesTestArgs) Read(iprot thrift.TProtocol) error {
 					temp := ID(v)
 					elem18 = temp
 				}
-				p.ListType = append(p.ListType, elem18)
+				p.ListType[i] = elem18
 			}
 			if err := iprot.ReadListEnd(); err != nil {
 				return thrift.PrependError("error reading list end: ", err)
@@ -3086,7 +3086,7 @@ func (p *FooUnderlyingTypesTestResult) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Success = make([]ID, 0, size)
+			p.Success = make([]ID, size, size)
 			for i := 0; i < size; i++ {
 				var elem20 ID
 				if v, err := iprot.ReadI64(); err != nil {
@@ -3095,7 +3095,7 @@ func (p *FooUnderlyingTypesTestResult) Read(iprot thrift.TProtocol) error {
 					temp := ID(v)
 					elem20 = temp
 				}
-				p.Success = append(p.Success, elem20)
+				p.Success[i] = elem20
 			}
 			if err := iprot.ReadListEnd(); err != nil {
 				return thrift.PrependError("error reading list end: ", err)

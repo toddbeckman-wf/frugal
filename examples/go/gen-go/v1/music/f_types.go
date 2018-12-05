@@ -422,13 +422,13 @@ func (p *Album) ReadField1(iprot thrift.TProtocol) error {
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
-	p.Tracks = make([]*Track, 0, size)
+	p.Tracks = make([]*Track, size, size)
 	for i := 0; i < size; i++ {
 		elem0 := NewTrack()
 		if err := elem0.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", elem0), err)
 		}
-		p.Tracks = append(p.Tracks, elem0)
+		p.Tracks[i] = elem0
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)

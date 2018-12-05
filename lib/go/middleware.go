@@ -59,7 +59,7 @@ func (a Arguments) Context() FContext {
 	return a[0].(FContext)
 }
 
-// Context sets the given FContext as the first argument.
+// SetContext sets the given FContext as the first argument.
 func (a Arguments) SetContext(ctx FContext) {
 	a[0] = ctx
 }

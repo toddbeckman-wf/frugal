@@ -233,13 +233,13 @@ func (l *albumWinnersSubscriber) recvContestStart(op string, pf *frugal.FProtoco
 		if err != nil {
 			return thrift.PrependError("error reading list begin: ", err)
 		}
-		req := make([]*Album, 0, size)
+		req := make([]*Album, size, size)
 		for i := 0; i < size; i++ {
 			elem1 := NewAlbum()
 			if err := elem1.Read(iprot); err != nil {
 				return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", elem1), err)
 			}
-			req = append(req, elem1)
+			req[i] = elem1
 		}
 		if err := iprot.ReadListEnd(); err != nil {
 			return thrift.PrependError("error reading list end: ", err)

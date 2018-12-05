@@ -70,7 +70,7 @@ func (p *Four) ReadField1(iprot thrift.TProtocol) error {
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
-	p.SomeField = make([]bool, 0, size)
+	p.SomeField = make([]bool, size, size)
 	for i := 0; i < size; i++ {
 		var elem1 bool
 		if v, err := iprot.ReadBool(); err != nil {
@@ -78,7 +78,7 @@ func (p *Four) ReadField1(iprot thrift.TProtocol) error {
 		} else {
 			elem1 = v
 		}
-		p.SomeField = append(p.SomeField, elem1)
+		p.SomeField[i] = elem1
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)

@@ -828,9 +828,9 @@ func (g *Generator) generateReadFieldRec(field *parser.Field, first bool) string
 			contents += "\t\treturn thrift.PrependError(\"error reading list begin: \", err)\n"
 			contents += "\t}\n"
 			if !isPointerField {
-				contents += fmt.Sprintf("\t%s%s %s make(%s, 0, size)\n", prefix, fName, eq, goOrigType)
+				contents += fmt.Sprintf("\t%s%s %s make(%s, size, size)\n", prefix, fName, eq, goOrigType)
 			} else {
-				contents += fmt.Sprintf("\ttemp := make(%s, 0, size)\n", goOrigType)
+				contents += fmt.Sprintf("\ttemp := make(%s, size, size)\n", goOrigType)
 				contents += fmt.Sprintf("\t%s%s %s &temp\n", prefix, fName, eq)
 			}
 			contents += "\tfor i := 0; i < size; i++ {\n"
@@ -838,7 +838,7 @@ func (g *Generator) generateReadFieldRec(field *parser.Field, first bool) string
 			valField := parser.FieldFromType(underlyingType.ValueType, valElem)
 			valContents := g.generateReadFieldRec(valField, false)
 			contents += valContents
-			contents += fmt.Sprintf("\t\t%s%s%s = append(%s%s%s, %s)\n", maybePointer, prefix, fName, maybePointer, prefix, fName, valElem)
+			contents += fmt.Sprintf("\t\t%s%s%s[i] = %s\n", maybePointer, prefix, fName, valElem)
 			contents += "\t}\n"
 			contents += "\tif err := iprot.ReadListEnd(); err != nil {\n"
 			contents += "\t\treturn thrift.PrependError(\"error reading list end: \", err)\n"

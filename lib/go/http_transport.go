@@ -173,14 +173,14 @@ func (h *FHTTPTransportBuilder) WithResponseSizeLimit(responseSizeLimit uint) *F
 	return h
 }
 
-// withRequestHeaders adds custom request headers. If set to nil (the default),
+// WithRequestHeaders adds custom request headers. If set to nil (the default),
 // there is no size limit on responses.
 func (h *FHTTPTransportBuilder) WithRequestHeaders(requestHeaders map[string]string) *FHTTPTransportBuilder {
 	h.requestHeaders = requestHeaders
 	return h
 }
 
-// withRequestHeadersFromFContext adds custom request headers to each request
+// WithRequestHeadersFromFContext adds custom request headers to each request
 // with a provided function that accepts an FContext and returns map of
 // string key-value pairs
 func (h *FHTTPTransportBuilder) WithRequestHeadersFromFContext(getRequestHeaders GetHeadersWithContext) *FHTTPTransportBuilder {

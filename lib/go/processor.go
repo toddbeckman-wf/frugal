@@ -104,10 +104,7 @@ func (f *FBaseProcessor) Process(iprot, oprot *FProtocol) error {
 	if err := oprot.WriteMessageEnd(); err != nil {
 		return err
 	}
-	if err := oprot.Flush(); err != nil {
-		return err
-	}
-	return nil
+	return oprot.Flush()
 }
 
 // AddMiddleware adds the given ServiceMiddleware to the FProcessor. This
