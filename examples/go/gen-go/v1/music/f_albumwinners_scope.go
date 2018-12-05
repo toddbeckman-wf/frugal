@@ -233,7 +233,7 @@ func (l *albumWinnersSubscriber) recvContestStart(op string, pf *frugal.FProtoco
 		if err != nil {
 			return thrift.PrependError("error reading list begin: ", err)
 		}
-		req := make([]*Album, size, size)
+		req := make([]*Album, size)
 		for i := 0; i < size; i++ {
 			elem1 := NewAlbum()
 			if err := elem1.Read(iprot); err != nil {

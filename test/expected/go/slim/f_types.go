@@ -761,7 +761,7 @@ func (p *TestingDefaults) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Listfield = make([]Int, size, size)
+			p.Listfield = make([]Int, size)
 			for i := 0; i < size; i++ {
 				var elem0 Int
 				if v, err := iprot.ReadI32(); err != nil {
@@ -811,7 +811,7 @@ func (p *TestingDefaults) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			temp := make([]Int, size, size)
+			temp := make([]Int, size)
 			p.List2 = &temp
 			for i := 0; i < size; i++ {
 				var elem1 Int
@@ -831,7 +831,7 @@ func (p *TestingDefaults) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.List3 = make([]Int, size, size)
+			p.List3 = make([]Int, size)
 			for i := 0; i < size; i++ {
 				var elem2 Int
 				if v, err := iprot.ReadI32(); err != nil {
@@ -850,7 +850,7 @@ func (p *TestingDefaults) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.List4 = make([]Int, size, size)
+			p.List4 = make([]Int, size)
 			for i := 0; i < size; i++ {
 				var elem3 Int
 				if v, err := iprot.ReadI32(); err != nil {
@@ -1260,7 +1260,7 @@ func (p *EventWrapper) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Events = make([]*Event, size, size)
+			p.Events = make([]*Event, size)
 			for i := 0; i < size; i++ {
 				elem6 := NewEvent()
 				if err := elem6.Read(iprot); err != nil {
@@ -1315,13 +1315,13 @@ func (p *EventWrapper) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Nums = make([][]Int, size, size)
+			p.Nums = make([][]Int, size)
 			for i := 0; i < size; i++ {
 				_, size, err := iprot.ReadListBegin()
 				if err != nil {
 					return thrift.PrependError("error reading list begin: ", err)
 				}
-				elem10 := make([]Int, size, size)
+				elem10 := make([]Int, size)
 				for i := 0; i < size; i++ {
 					var elem11 Int
 					if v, err := iprot.ReadI32(); err != nil {
@@ -1345,7 +1345,7 @@ func (p *EventWrapper) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Enums = make([]ItsAnEnum, size, size)
+			p.Enums = make([]ItsAnEnum, size)
 			for i := 0; i < size; i++ {
 				var elem12 ItsAnEnum
 				if v, err := iprot.ReadI32(); err != nil {
@@ -1394,7 +1394,7 @@ func (p *EventWrapper) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.DeprList = make([]bool, size, size)
+			p.DeprList = make([]bool, size)
 			for i := 0; i < size; i++ {
 				var elem13 bool
 				if v, err := iprot.ReadBool(); err != nil {

@@ -828,9 +828,9 @@ func (g *Generator) generateReadFieldRec(field *parser.Field, first bool) string
 			contents += "\t\treturn thrift.PrependError(\"error reading list begin: \", err)\n"
 			contents += "\t}\n"
 			if !isPointerField {
-				contents += fmt.Sprintf("\t%s%s %s make(%s, size, size)\n", prefix, fName, eq, goOrigType)
+				contents += fmt.Sprintf("\t%s%s %s make(%s, size)\n", prefix, fName, eq, goOrigType)
 			} else {
-				contents += fmt.Sprintf("\ttemp := make(%s, size, size)\n", goOrigType)
+				contents += fmt.Sprintf("\ttemp := make(%s, size)\n", goOrigType)
 				contents += fmt.Sprintf("\t%s%s %s &temp\n", prefix, fName, eq)
 			}
 			contents += "\tfor i := 0; i < size; i++ {\n"

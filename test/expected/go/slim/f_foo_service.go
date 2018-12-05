@@ -2933,7 +2933,7 @@ func (p *FooUnderlyingTypesTestArgs) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.ListType = make([]ID, size, size)
+			p.ListType = make([]ID, size)
 			for i := 0; i < size; i++ {
 				var elem18 ID
 				if v, err := iprot.ReadI64(); err != nil {
@@ -3086,7 +3086,7 @@ func (p *FooUnderlyingTypesTestResult) Read(iprot thrift.TProtocol) error {
 			if err != nil {
 				return thrift.PrependError("error reading list begin: ", err)
 			}
-			p.Success = make([]ID, size, size)
+			p.Success = make([]ID, size)
 			for i := 0; i < size; i++ {
 				var elem20 ID
 				if v, err := iprot.ReadI64(); err != nil {

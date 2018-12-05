@@ -441,7 +441,7 @@ func (l *eventsSubscriber) recvSomeList(op string, pf *frugal.FProtocolFactory, 
 		if err != nil {
 			return thrift.PrependError("error reading list begin: ", err)
 		}
-		req := make([]map[ID]*Event, size, size)
+		req := make([]map[ID]*Event, size)
 		for i := 0; i < size; i++ {
 			_, _, size, err := iprot.ReadMapBegin()
 			if err != nil {

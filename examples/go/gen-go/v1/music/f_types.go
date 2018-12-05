@@ -422,7 +422,7 @@ func (p *Album) ReadField1(iprot thrift.TProtocol) error {
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
-	p.Tracks = make([]*Track, size, size)
+	p.Tracks = make([]*Track, size)
 	for i := 0; i < size; i++ {
 		elem0 := NewTrack()
 		if err := elem0.Read(iprot); err != nil {
